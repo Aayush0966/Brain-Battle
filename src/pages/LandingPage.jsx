@@ -1,17 +1,24 @@
 'use client'
-
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Stars, Rocket, Brain, Book, Trophy } from 'lucide-react';
 import {BackgroundBeamsWithCollision} from "@/components/ui/background-beams-with-collision";
-
-const HomePage = () => {
+import {useRouter} from "next/navigation";
+const LandingPage = () => {
     const quotes = [
         "Challenge Your Mind, Expand Your Horizons",
         "Where Knowledge Meets Fun",
         "Think Fast, Learn Faster",
         "Exercise Your Brain Daily"
     ];
+    const router = useRouter()
+
+
+    const handleClick = () => {
+        console.log("Start Your Journey");
+        router.push("/home");
+    }
+
 
     const [currentQuote, setCurrentQuote] = React.useState(0);
 
@@ -23,55 +30,7 @@ const HomePage = () => {
     }, []);
 
     return (
-        <BackgroundBeamsWithCollision className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-amber-50 to-purple-100 dark:from-black dark:to-slate-900 relative overflow-hidden">
-            <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className="relative z-10 text-center px-8 py-12 rounded-3xl backdrop-blur-md bg-white/20 dark:bg-black/30 shadow-2xl border border-white/20 max-w-2xl mx-4"
-            >
-                <motion.div
-                    className="mb-8 relative inline-block"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{
-                        type: "spring",
-                        stiffness: 260,
-                        damping: 20,
-                        delay: 0.2
-                    }}
-                >
-                    <motion.div
-                        animate={{
-                            y: [0, -10, 0],
-                        }}
-                        transition={{
-                            duration: 3,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                        }}
-                    >
-                        <Brain className="w-20 h-20 mx-auto mb-4 text-purple-600 dark:text-purple-400" />
-                    </motion.div>
-                    <motion.h1
-                        className="text-5xl md:text-6xl font-bold mb-2"
-                        animate={{
-                            backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-                        }}
-                        transition={{
-                            duration: 8,
-                            repeat: Infinity,
-                            ease: "linear"
-                        }}
-                        style={{
-                            backgroundSize: "300% 300%"
-                        }}
-                    >
-                        <span className="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 dark:from-purple-400 dark:via-pink-400 dark:to-blue-400 text-transparent bg-clip-text">
-                            Brain Battle
-                        </span>
-                    </motion.h1>
-                </motion.div>
+       <motion.div>
 
                 <div className="h-8 mb-8 overflow-hidden">
                     <AnimatePresence mode="wait">
@@ -126,6 +85,8 @@ const HomePage = () => {
                 </motion.div>
 
                 <motion.button
+                    onClick={handleClick}
+
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className="group relative px-8 py-4 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 rounded-full text-white font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-3 mx-auto overflow-hidden"
@@ -163,8 +124,8 @@ const HomePage = () => {
                     />
                 </motion.button>
             </motion.div>
-        </BackgroundBeamsWithCollision>
+
     );
 };
 
-export default HomePage;
+export default LandingPage;
