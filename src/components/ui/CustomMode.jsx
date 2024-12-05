@@ -3,18 +3,25 @@ import { motion } from "framer-motion";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Sparkles } from "lucide-react";
-import { saveUserPrefs } from "@/app/actions";
+import {getQuestionPack, saveUserPrefs} from "@/app/actions";
+import axios from "axios";
+import {getQuestions} from "@/lib/GeminiClient";
 
 const CustomMode = () => {
     const [isHovered, setIsHovered] = React.useState(false);
 
- // const handleFormSubmit = (e) => {
- //        e.preventDefault();
- //        const userPrefs = e.target[0].value;
- //        saveUserPrefs(userPrefs);
- //
- //
- // }
+ const handleFormSubmit = async (e) => {
+        e.preventDefault();
+        const userPrefs = e.target[0].value;
+        const {userId, questionPack} = await getQuestionPack(userPrefs);
+        localStorage.setItem('user', JSON.stringify(userId) );
+        try {
+            const response = await axios.post('/api/user', {userId, questionPack});
+        }
+        catch (error) {
+            console.error("Error:", error);
+        }
+ }
 
     return (
         <motion.form

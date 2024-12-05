@@ -9,16 +9,30 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "cockroachdb"
   url      = env("DATABASE_URL")
 }
 
-model question {
-  id        String   @id @default(cuid())
-  title     String
-  answer    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  userId  String
+
+model Quiz {
+  id        String   @id @default(cuid()) // Unique ID for each quiz
+  title     String   // Title of the quiz (e.g., "React Quiz")
+  createdAt DateTime @default(now()) // When the quiz was generated
+  updatedAt DateTime @updatedAt // When the quiz was last updated
+  userId    String   // User who generated the quiz
+  questions Question[]
 }
+
+model Question {
+  id            String   @id @default(cuid()) // Unique ID for each question
+  questionText  String   // The question text
+  options       String[] // Array of possible answers
+  correctAnswer String   // Correct answer text
+  explanation   String   // Explanation for the correct answer
+  quizId        String   // Foreign key to Quiz
+  quiz          Quiz     @relation(fields: [quizId], references: [id]) // Relation to Quiz
+  createdAt     DateTime @default(now())
+}
+
+
 
