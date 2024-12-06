@@ -17,9 +17,11 @@ const CustomMode = () => {
         localStorage.setItem('user', JSON.stringify(userId) );
         try {
             const response = await axios.post('/api/user', {userId, questionPack});
+            console.log(response);
+
         }
         catch (error) {
-            console.error("Error:", error);
+            console.error("Error:  ", error);
         }
  }
 

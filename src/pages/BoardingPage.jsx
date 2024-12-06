@@ -4,6 +4,7 @@ import {Button} from "@/components/ui/button";
 import ModeSelection from "@/components/ui/ModeSelection";
 import {boardingHeader, guidedHeader, customHeader} from "@/lib/constants";
 import CustomMode from "@/components/ui/CustomMode";
+import GuidedMode from "@/components/ui/GuidedMode";
 
 const BoardingPage = () => {
     const [level, setLevel] = React.useState(0);
@@ -43,11 +44,17 @@ const BoardingPage = () => {
                         selected={selected}
                     />
                 )}
-                {level === 1 && (
+                {level === 1 && selected === 'custom' && (
                     <div className="w-full space-y-6 dark:text-white">
                         <CustomMode />
                     </div>
                 )}
+                {level === 1 && selected === 'guided' && (
+                    <div className="w-full space-y-6 dark:text-white">
+                        <GuidedMode />
+                    </div>
+                )}
+
             </div>
         </div>
     )
