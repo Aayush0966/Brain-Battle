@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,26 +7,69 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-model Quiz {
-  id        String   @id @default(cuid()) // Unique ID for each quiz
-  title     String   // Title of the quiz (e.g., "React Quiz")
-  createdAt DateTime @default(now()) // When the quiz was generated
-  updatedAt DateTime @updatedAt // When the quiz was last updated
-  userId    String   // User who generated the quiz
-  questions Question[]
+model CustomQuiz {
+  id        String           @id @default(cuid())
+  title     String
+  userId    String
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  questions CustomQuestion[]
 }
 
-model Question {
-  id            String   @id @default(cuid()) // Unique ID for each question
-  questionText  String   // The question text
-  options       String[] // Array of possible answers
-  correctAnswer String   // Correct answer text
-  explanation   String   // Explanation for the correct answer
-  quizId        String   // Foreign key to Quiz
-  quiz          Quiz     @relation(fields: [quizId], references: [id]) // Relation to Quiz
-  createdAt     DateTime @default(now())
+model CustomQuestion {
+  id            String     @id @default(cuid())
+  questionText  String
+  options       String
+  correctAnswer String
+  explanation   String?
+  quizId        String
+  createdAt     DateTime   @default(now())
+  quiz          CustomQuiz @relation(fields: [quizId], references: [id])
 }
 
+model GuidedQuiz {
+  id         String           @id @default(cuid())
+  title      String
+  category   Category
+  difficulty Difficulty
+  createdAt  DateTime         @default(now())
+  questions  GuidedQuestion[]
+}
 
+model GuidedQuestion {
+  id            String      @id @default(cuid())
+  questionText  String
+  options       String
+  correctAnswer String
+  explanation   String?
+  quizId        String?
+  category      Category
+  difficulty    Difficulty
+  quiz          GuidedQuiz? @relation(fields: [quizId], references: [id])
+}
 
+model migration_internal_statements {
+  statement_order BigInt @id
+  statement_id    String @unique @db.Uuid
+  data            Json?
+
+  @@map("_migration_internal_statements")
+}
+
+enum Category {
+  REACT
+  JAVASCRIPT
+  TYPESCRIPT
+}
+
+enum Difficulty {
+  BEGINNER
+  MEDIUM
+  ADVANCED
+}
+
+enum crdb_internal_region {
+  aws_ap_south_1     @map("aws-ap-south-1")
+  aws_ap_southeast_1 @map("aws-ap-southeast-1")
+  aws_eu_central_1   @map("aws-eu-central-1")
+}

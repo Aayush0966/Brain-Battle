@@ -32,3 +32,8 @@ export const getQuestionPack = async (userPrefs) => {
     const questionPack = await getQuestions(prompt);
     return {userId, questionPack};
 }
+
+export const getUserId = async () => {
+    const userId = await setUserCookie();
+    return userId;
+}
