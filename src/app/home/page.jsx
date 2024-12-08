@@ -1,8 +1,8 @@
-import HomePage from '@/pages/BoardingPage'
-import WrapperComponent from "@/components/ui/WrapperComponent";
+import BoardingPage from "@/pages/BoardingPage";
+
 const page = () => {
     return (
-       <WrapperComponent />
+       <BoardingPage />
     )
 }
 export default page

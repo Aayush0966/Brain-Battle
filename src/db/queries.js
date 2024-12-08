@@ -29,7 +29,6 @@ export const saveQuiz = async (userId, quizName, questions) => {
         });
 
         // Log the result after the quiz is created
-        console.log('Quiz saved successfully:', quiz);
         return quiz;
     } catch (error) {
         console.error('An error occurred during quiz save process:');

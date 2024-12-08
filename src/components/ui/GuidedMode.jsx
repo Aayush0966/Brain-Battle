@@ -1,3 +1,4 @@
+'use client'
 import React from 'react';
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -7,8 +8,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import axios from "axios";
 import {getUserId} from "@/app/actions";
+import {useRouter} from "next/navigation";
 
 const QuizSetup = () => {
+    const router = useRouter();
     const [isHovered, setIsHovered] = React.useState(false);
     const [preferences, setPreferences] = React.useState({
         category: '',
@@ -35,9 +38,10 @@ const QuizSetup = () => {
                     mode: 'guided',
                 },
             });
-
-            // Handle the response
-            console.log(response.data);
+            localStorage.removeItem('boardingDetails');
+            localStorage.setItem('questions', JSON.stringify(response.data.questions));
+            localStorage.setItem('prefs', JSON.stringify(preferences));
+            router.push('/game');
         } catch (error) {
             console.error("Error: ", error);
         }
