@@ -89,28 +89,27 @@ const GamePage = () => {
     const progress = ((currentQuestion + 1) / totalQuestions) * 100;
 
     return (
-        <div className=" text-gray-100 overflow-auto h-full p-6 md:p-12">
+        <div className="text-gray-100 overflow-auto h-full p-4 sm:p-6 md:p-12">
             {
                 isGameOver &&
                 <QuizResult score={score} />
             }
             {!isGameOver && <div className="max-w-4xl mx-auto">
                 <div className="mb-8">
-                    <div className="flex justify-between items-center mb-2">
-                        <span
-                            className="text-sm font-medium text-gray-300">Question {currentQuestion + 1} of {totalQuestions}</span>
+                    <div className="flex flex-col sm:flex-row justify-between items-center mb-2">
+                        <span className="text-sm font-medium text-gray-300">Question {currentQuestion + 1} of {totalQuestions}</span>
                         <span className="text-sm font-medium text-gray-300">{Math.round(progress)}% Complete</span>
                     </div>
                     <Progress value={progress} className="h-2 bg-gray-800"/>
                 </div>
-                <Card className="mb-8 bg-black ">
+                <Card className="mb-8 bg-black">
                     <CardContent className="pt-6">
-                        <h1 className="text-2xl md:text-3xl font-bold mb-6 text-gray-100">
+                        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold mb-6 text-gray-100">
                             {questionList[currentQuestion]?.questionText}
                         </h1>
 
                         {/* Options Grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             {options && options.map((option, index) => (
                                 <button
                                     key={index}
@@ -146,7 +145,7 @@ const GamePage = () => {
                     </div>
                 )}
 
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between gap-4 items-center">
                     <Button
                         onClick={handleSubmit}
                         disabled={!selectedOption || showResult}

@@ -9,7 +9,6 @@ export const getQuestions = async (prompt) => {
     }
 
     try {
-        console.log(prompt);
         const response = await axios.post(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
             contents: [
                 {

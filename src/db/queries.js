@@ -3,8 +3,6 @@ const prisma = new PrismaClient();
 
 export const saveQuiz = async (userId, quizName, questions) => {
     try {
-        console.log(`Attempting to save quiz: ${quizName} for userId: ${userId}`);
-        // Validate questions array
         if (!Array.isArray(questions) || questions.some(q => q == null || typeof q !== 'object')) {
             throw new TypeError('Each question must be a non-null object');
         }
@@ -16,7 +14,6 @@ export const saveQuiz = async (userId, quizName, questions) => {
                 userId: userId,
                 questions: {
                     create: questions.map((q, index) => {
-                        console.log(`Processing question ${index + 1}:`, q);
                         return {
                             questionText: q.question,
                             options: q.options,
@@ -28,7 +25,6 @@ export const saveQuiz = async (userId, quizName, questions) => {
             },
         });
 
-        // Log the result after the quiz is created
         return quiz;
     } catch (error) {
         console.error('An error occurred during quiz save process:');
@@ -36,22 +32,17 @@ export const saveQuiz = async (userId, quizName, questions) => {
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
             console.error(`Prisma error Code: ${error.code}`);
             console.error(`Prisma error message: ${error.message}`);
-            // Log the full error for debugging
             console.error('Full error details:', error);
         } else {
-            // This handles other types of errors
             console.error('Error saving quiz:', error);
         }
 
-        throw error; // Rethrow the error to propagate it
+        throw error;
     }
 };
 
 export const getGuidedQuestions = async (userId, preferences) => {
     try {
-        console.log(prisma);
-
-        console.log(`Fetching quiz data for userId: ${userId}, preferences:`, preferences);
 
         const questions = await prisma.guidedQuestion.findMany({
             where: {
@@ -59,14 +50,13 @@ export const getGuidedQuestions = async (userId, preferences) => {
                 category: preferences.category.toUpperCase(),      // Filter by category
             },
             include: {
-                quiz: true,  // Include related quiz if needed
+                quiz: true,  
             },
         });
 
-        console.log('Quiz data fetched successfully:', questions);
         return questions;
     } catch (error) {
         console.error('An error occurred during quiz data fetch process:', error);
-        throw error; // Rethrow the error to propagate it
+        throw error; 
     }
 };

@@ -7,8 +7,8 @@ import { Sparkles } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import axios from "axios";
-import {getUserId} from "@/app/actions";
 import {useRouter} from "next/navigation";
+import toast from 'react-hot-toast';
 
 const QuizSetup = () => {
     const router = useRouter();
@@ -17,6 +17,7 @@ const QuizSetup = () => {
         category: '',
         difficulty: 'medium',
     });
+    const [isLoading, setIsLoading] = React.useState(false);
 
     const categories = [
         { id: 'react', label: 'React Fundamentals' },
@@ -29,6 +30,12 @@ const QuizSetup = () => {
     ];
 
     const handleSubmit = async () => {
+        if (!preferences.category) {
+            toast.error("Please select a category");
+            return;
+        }
+
+        setIsLoading(true);
         try {
             const response = await axios.get('/api/quiz', {
                 params: {
@@ -41,6 +48,8 @@ const QuizSetup = () => {
             router.push('/game');
         } catch (error) {
             console.error("Error: ", error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -68,9 +77,10 @@ const QuizSetup = () => {
                             <Select
                                 value={preferences.category}
                                 onValueChange={(value) => setPreferences(prev => ({ ...prev, category: value }))}
+                                required
                             >
                                 <SelectTrigger className="w-full bg-slate-800/50 border-slate-600">
-                                    <SelectValue placeholder="Select a category" />
+                                    <SelectValue placeholder="Select a category *" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {categories.map((category) => (
@@ -112,6 +122,7 @@ const QuizSetup = () => {
                             onClick={handleSubmit}
                             onMouseEnter={() => setIsHovered(true)}
                             onMouseLeave={() => setIsHovered(false)}
+                            disabled={isLoading}
                             className="w-full group relative overflow-hidden px-8 py-6 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-xl shadow-lg text-lg font-medium transition-all duration-300"
                         >
                             <motion.span
@@ -119,7 +130,7 @@ const QuizSetup = () => {
                                 animate={{ scale: isHovered ? 1.05 : 1 }}
                                 transition={{ duration: 0.3 }}
                             >
-                                Generate Quiz
+                                {isLoading ? 'Generating...' : 'Generate Quiz'}
                                 <Sparkles className="w-5 h-5" />
                             </motion.span>
                             <motion.div

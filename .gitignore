@@ -42,3 +42,8 @@ prisma/migrations
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+.idea
+
+**/public/sw.js
+**/public/workbox-*.js

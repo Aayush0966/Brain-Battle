@@ -27,15 +27,13 @@ export async function GET(req, res) {
 
 const processQuizData = (questionPack) => {
     try {
-        // Remove leading and trailing quotes and unescape any control characters
         const cleanedPack = questionPack.trim().replace(/^"|"$/g, '').replace(/\n/g, '').replace(/\\/g, '');
-        // Parse the cleaned JSON string
         const parsedPack = JSON.parse(cleanedPack);
         const title = parsedPack.title;
         const questions = parsedPack.questions;
-        return {title, questions} // Return the parsed JSON object
+        return {title, questions} 
     } catch (error) {
         console.error("Error parsing quiz data:", error);
-        return null; // Return null if parsing fails
+        return null; 
     }
 };

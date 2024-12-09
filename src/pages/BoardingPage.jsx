@@ -22,18 +22,12 @@ const BoardingPage = () => {
             level: level + 1,
             selected
         }
-        localStorage.setItem('boardingDetails', JSON.stringify(boardingDetails));
     }
 
     React.useEffect(() => {
         const questions = JSON.parse(localStorage.getItem('questions'));
-        const boardingDetails = JSON.parse(localStorage.getItem('boardingDetails'));
         if (questions) {
             window.location.href = '/game';
-        }
-        if (boardingDetails) {
-            setLevel(boardingDetails.level);
-            setSelected(boardingDetails.selected);
         }
     }, [])
 

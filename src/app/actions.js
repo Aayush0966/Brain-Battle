@@ -18,10 +18,8 @@ export const setUserCookie = async () => {
             path: '/',
         });
 
-        console.log(`New userId generated and set in cookies: ${newUserId}`);
         return newUserId;
     } else {
-        console.log(`Existing userId found in cookies: ${existingUserId}`);
         return existingUserId;
     }
 };
