@@ -20,14 +20,12 @@ const QuizSetup = () => {
 
     const categories = [
         { id: 'react', label: 'React Fundamentals' },
-        { id: 'javascript', label: 'JavaScript' },
-        { id: 'typescript', label: 'TypeScript' }
+        { id: 'javascript', label: 'JavaScript' }
     ];
 
     const difficulties = [
         { id: 'beginner', label: 'Beginner' },
-        { id: 'medium', label: 'Medium' },
-        { id: 'advanced', label: 'Advanced' }
+        { id: 'medium', label: 'Medium' }
     ];
 
     const handleSubmit = async () => {
@@ -40,7 +38,6 @@ const QuizSetup = () => {
             });
             localStorage.removeItem('boardingDetails');
             localStorage.setItem('questions', JSON.stringify(response.data.questions));
-            localStorage.setItem('prefs', JSON.stringify(preferences));
             router.push('/game');
         } catch (error) {
             console.error("Error: ", error);
@@ -54,7 +51,7 @@ const QuizSetup = () => {
             transition={{ duration: 0.5 }}
             className="w-full max-w-xl mx-auto"
         >
-            <Card className="p-8 bg-gradient-to-br from-slate-900/95 to-slate-800/95 backdrop-blur-lg rounded-xl shadow-xl border-slate-700">
+            <Card className="p-8  lg:backdrop-blur-lg rounded-xl bg-transparent shadow-xl border-slate-700">
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
