@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { CheckCircle, XCircle, ArrowRight, AlertCircle, BookOpen } from "lucide-react";
+import { CheckCircle, XCircle, ArrowRight, AlertCircle, BookOpen, X } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import QuizResult from "@/components/QuizResult";
 import toast from "react-hot-toast";
@@ -86,6 +86,11 @@ const GamePage = () => {
 
     };
 
+    const handleClose = () => {
+        localStorage.removeItem('questions');
+        window.location.href = '/home';
+    };
+
     const progress = ((currentQuestion + 1) / totalQuestions) * 100;
 
     return (
@@ -95,6 +100,16 @@ const GamePage = () => {
                 <QuizResult score={score} />
             }
             {!isGameOver && <div className="max-w-4xl mx-auto">
+                <div className="flex justify-end mb-4">
+                    <Button
+                        onClick={handleClose}
+                        variant="ghost"
+                        className="text-gray-400 hover:text-gray-100"
+                    >
+                        <X className="h-5 w-5" />
+                        <span className="ml-2">Close Quiz</span>
+                    </Button>
+                </div>
                 <div className="mb-8">
                     <div className="flex flex-col sm:flex-row justify-between items-center mb-2">
                         <span className="text-sm font-medium text-gray-300">Question {currentQuestion + 1} of {totalQuestions}</span>
