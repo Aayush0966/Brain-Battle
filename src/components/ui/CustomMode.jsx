@@ -3,25 +3,31 @@ import { motion } from "framer-motion";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Sparkles } from "lucide-react";
-import {getQuestionPack, saveUserPrefs} from "@/app/actions";
+import {getQuestionPack} from "@/app/actions";
 import axios from "axios";
-import {getQuestions} from "@/lib/GeminiClient";
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 const CustomMode = () => {
     const [isHovered, setIsHovered] = React.useState(false);
+    const router = useRouter()
 
  const handleFormSubmit = async (e) => {
         e.preventDefault();
         const userPrefs = e.target[0].value;
         const {userId, questionPack} = await getQuestionPack(userPrefs);
         localStorage.setItem('user', JSON.stringify(userId) );
-        try {
-            const response = await axios.post('/api/user', {userId, questionPack});
-
+        const response = await axios.post('/api/quiz', {
+            userId, 
+            questionPack
+        })
+        if (response.status !== 201) {
+            toast.error("Something went wrong")
         }
-        catch (error) {
-            console.error("Error:  ", error);
-        }
+        toast.success(response.data.message)
+        const questions = response?.data?.questionList;
+        localStorage.setItem('questions', JSON.stringify(questions));  
+        router.push("/game")
  }
 
     return (

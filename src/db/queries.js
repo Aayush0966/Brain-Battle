@@ -1,53 +1,52 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-export const saveQuiz = async (userId, quizName, questions) => {
+export const saveQuiz = async (userId, title, questions) => {
     try {
         if (!Array.isArray(questions) || questions.some(q => q == null || typeof q !== 'object')) {
             throw new TypeError('Each question must be a non-null object');
         }
 
-        // Create the quiz
-        const quiz = await prisma.quiz.create({
+        const mappedQuestions = questions.map((q) => {
+            const optionsString = JSON.stringify({
+                options: q.options
+            });
+
+            return {
+                questionText: q.question,
+                options: optionsString,
+                correctAnswer: q.answer,
+                explanation: "hint",
+            };
+        });
+
+        const quiz = await prisma.customQuiz.create({
             data: {
-                title: quizName,
+                title,
                 userId: userId,
                 questions: {
-                    create: questions.map((q, index) => {
-                        return {
-                            questionText: q.question,
-                            options: q.options,
-                            correctAnswer: q.answer,
-                            explanation: "hint",
-                        };
-                    }),
+                    create: mappedQuestions,
                 },
             },
         });
 
         return quiz;
     } catch (error) {
-        console.error('An error occurred during quiz save process:');
-
         if (error instanceof Prisma.PrismaClientKnownRequestError) {
-            console.error(`Prisma error Code: ${error.code}`);
-            console.error(`Prisma error message: ${error.message}`);
-            console.error('Full error details:', error);
-        } else {
-            console.error('Error saving quiz:', error);
+            throw error;
         }
-
         throw error;
     }
 };
+
 
 export const getGuidedQuestions = async (userId, preferences) => {
     try {
 
         const questions = await prisma.guidedQuestion.findMany({
             where: {
-                difficulty: preferences.difficulty.toUpperCase(),  // Filter by difficulty
-                category: preferences.category.toUpperCase(),      // Filter by category
+                difficulty: preferences.difficulty.toUpperCase(),  
+                category: preferences.category.toUpperCase(),     
             },
             include: {
                 quiz: true,  
@@ -60,3 +59,16 @@ export const getGuidedQuestions = async (userId, preferences) => {
         throw error; 
     }
 };
+
+export const getCustomQuestions = async (quizId ) => {
+    
+    try {
+        const questions = await prisma.customQuestion.findMany({
+            where : {quizId}
+        });
+        return questions;
+    } catch (error) {
+        console.error('An error occurred during quiz data fetch process:', error);
+        throw error; 
+    }
+}

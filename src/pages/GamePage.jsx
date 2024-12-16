@@ -27,7 +27,7 @@ const GamePage = () => {
         }
         setQuestionList(questions);
         setTotalQuestions(Object.keys(questions).length);
-        const optionArr = JSON.parse(questions[currentQuestion]?.options);
+        const optionArr = JSON.parse(questions[currentQuestion]?.options)
         setOptions(optionArr.options);
     }, [currentQuestion]);
 

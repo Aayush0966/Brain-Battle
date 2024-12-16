@@ -26,7 +26,18 @@ export const setUserCookie = async () => {
 
 export const getQuestionPack = async (userPrefs) => {
    const userId = await setUserCookie();
-    const prompt = `Generate a quiz in JSON object format consisting of 10 multiple-choice questions based on the following descriptions: "${userPrefs}". The format should strictly be: {title: "", questions: []}. Each question in the questions array should have 4 options, and the correct answer should be clearly marked. Do not include any special characters like \\n, \\t, or others, and ensure the response is a valid JSON object.`;
+    const prompt = `Generate a quiz based on the following descriptions: "${userPrefs}". The response must strictly follow this JSON format:
+{
+  "title": "",
+  "questions": [
+    {
+      "question": "",
+      "options": ["", "", "", ""],
+      "answer": ""
+    }
+  ]
+}
+Provide exactly 10 questions. The answer field should contain the correct option text. Do not include any special characters like \\n or \\t. Ensure the response is a valid JSON object.`;
     const questionPack = await getQuestions(prompt);
     return {userId, questionPack};
 }
