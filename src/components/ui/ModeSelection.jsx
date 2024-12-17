@@ -6,7 +6,7 @@ const ModeSelection = ({setSelected, handleLevels, selected }) => {
     return (
         <div className="space-y-6 m-10 dark:text-white">
             <Select onValueChange={setSelected}>
-                <SelectTrigger className="w-full h-12 text-lg">
+                <SelectTrigger className="w-full h-12 text-lg ">
                     <SelectValue placeholder="Choose your journey"/>
                 </SelectTrigger>
                 <SelectContent>

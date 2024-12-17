@@ -43,7 +43,7 @@ const QuizSetup = () => {
                     mode: 'guided',
                 },
             });
-            localStorage.removeItem('boardingDetails');
+            localStorage.setItem("prefs", JSON.stringify(preferences))
             localStorage.setItem('questions', JSON.stringify(response.data.questions));
             router.push('/game');
         } catch (error) {

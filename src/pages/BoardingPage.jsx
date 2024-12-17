@@ -1,12 +1,9 @@
 'use client'
 import React from 'react'
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
-import {Button} from "@/components/ui/button";
 import ModeSelection from "@/components/ui/ModeSelection";
 import {boardingHeader, guidedHeader, customHeader} from "@/lib/constants";
 import CustomMode from "@/components/ui/CustomMode";
 import GuidedMode from "@/components/ui/GuidedMode";
-import {useLayoutEffect} from "react";
 
 const BoardingPage = () => {
     const [level, setLevel] = React.useState(0);
@@ -18,10 +15,6 @@ const BoardingPage = () => {
 
     const handleLevels = () => {
         setLevel(level + 1);
-        const boardingDetails = {
-            level: level + 1,
-            selected
-        }
     }
 
     React.useEffect(() => {

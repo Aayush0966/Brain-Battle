@@ -10,7 +10,8 @@ import { useRouter } from 'next/navigation';
 
 const CustomMode = () => {
     const [isHovered, setIsHovered] = React.useState(false);
-    const [loading, setLoading] = React.useState(false)
+    const [loading, setLoading] = React.useState(false);
+    const [inputValue, setInputValue] = React.useState('');
     const router = useRouter()
 
  const handleFormSubmit = async (e) => {
@@ -46,7 +47,8 @@ const CustomMode = () => {
                 transition={{ duration: 0.2 }}
             >
                 <Textarea
-
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
                     placeholder="Describe the type of quiz you want. For example: 'I want a quiz questions on advanced React topics.'"
                     className="min-h-[150px] w-full p-6 dark:text-gray-200 bg-white/90 dark:bg-slate-800/90 rounded-xl shadow-lg border-2 border-transparent focus:border-purple-400 dark:focus:border-purple-500 focus:ring-0 resize-none text-lg transition-all duration-300"
                 />
@@ -58,7 +60,7 @@ const CustomMode = () => {
                 whileTap={{ scale: 0.95 }}
             >
                 <Button
-                    disabled={loading}
+                    disabled={loading || !inputValue.trim()}
                     type="submit"
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
