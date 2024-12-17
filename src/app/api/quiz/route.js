@@ -15,7 +15,6 @@ export async function POST(req, res) {
         return NextResponse.json({error: "Something went wrong"}, {status: 500})
        }
       const questionList = await getCustomQuestions(quiz.id)
-      console.log(questionList)
     return NextResponse.json({ message: 'Question generated successfully', questionList }, {status: 201});
 }
 

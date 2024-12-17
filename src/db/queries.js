@@ -16,7 +16,7 @@ export const saveQuiz = async (userId, title, questions) => {
                 questionText: q.question,
                 options: optionsString,
                 correctAnswer: q.answer,
-                explanation: "hint",
+                explanation: q.explanation,
             };
         });
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from "framer-motion";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Loader2 } from "lucide-react";
 import {getQuestionPack} from "@/app/actions";
 import axios from "axios";
 import toast from 'react-hot-toast';
@@ -10,10 +10,12 @@ import { useRouter } from 'next/navigation';
 
 const CustomMode = () => {
     const [isHovered, setIsHovered] = React.useState(false);
+    const [loading, setLoading] = React.useState(false)
     const router = useRouter()
 
  const handleFormSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         const userPrefs = e.target[0].value;
         const {userId, questionPack} = await getQuestionPack(userPrefs);
         localStorage.setItem('user', JSON.stringify(userId) );
@@ -21,6 +23,7 @@ const CustomMode = () => {
             userId, 
             questionPack
         })
+        setLoading(false)
         if (response.status !== 201) {
             toast.error("Something went wrong")
         }
@@ -55,6 +58,7 @@ const CustomMode = () => {
                 whileTap={{ scale: 0.95 }}
             >
                 <Button
+                    disabled={loading}
                     type="submit"
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
@@ -65,8 +69,17 @@ const CustomMode = () => {
                         animate={{ x: isHovered ? [0, -4, 0] : 0 }}
                         transition={{ duration: 0.3 }}
                     >
-                        Generate Quiz
-                        <Sparkles className="w-5 h-5" />
+                        {loading ? (
+                            <>
+                                <Loader2 className="w-5 h-5 animate-spin" />
+                                Generating Quiz...
+                            </>
+                        ) : (
+                            <>
+                                Generate Quiz
+                                <Sparkles className="w-5 h-5" />
+                            </>
+                        )}
                     </motion.span>
                     <motion.div
                         className="absolute inset-0 bg-gradient-to-r from-purple-400 to-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"

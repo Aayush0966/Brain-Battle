@@ -33,7 +33,8 @@ export const getQuestionPack = async (userPrefs) => {
     {
       "question": "",
       "options": ["", "", "", ""],
-      "answer": ""
+      "answer": "",
+      "explanation": ""
     }
   ]
 }
