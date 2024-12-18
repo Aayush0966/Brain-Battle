@@ -7,6 +7,7 @@ import {getQuestionPack} from "@/app/actions";
 import axios from "axios";
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import { processQuizData } from '@/lib/utils';
 
 const CustomMode = () => {
     const [isHovered, setIsHovered] = React.useState(false);
@@ -14,23 +15,41 @@ const CustomMode = () => {
     const [inputValue, setInputValue] = React.useState('');
     const router = useRouter()
 
+    const mapQuestions = (questions) => {
+        return questions.map((q) => {
+            const optionsString = JSON.stringify({
+                options: q.options
+            });
+
+            return {
+                questionText: q.question,
+                options: optionsString,
+                correctAnswer: q.answer,
+                explanation: q.explanation,
+            };
+        });
+    };
+
  const handleFormSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         const userPrefs = e.target[0].value;
         const {userId, questionPack} = await getQuestionPack(userPrefs);
         localStorage.setItem('user', JSON.stringify(userId) );
-        const response = await axios.post('/api/quiz', {
-            userId, 
-            questionPack
-        })
-        setLoading(false)
-        if (response.status !== 201) {
-            toast.error("Something went wrong")
-        }
-        toast.success(response.data.message)
-        const questions = response?.data?.questionList;
-        localStorage.setItem('questions', JSON.stringify(questions));  
+        // const response = await axios.post('/api/quiz', {
+        //     userId, 
+        //     questionPack
+        // })
+        // setLoading(false)
+        // if (response.status !== 201) {
+        //     toast.error("Something went wrong")
+        // }
+        // toast.success(response.data.message)
+        // const questions = response?.data?.questionList;
+        const {title, questions} = processQuizData(questionPack)
+        console.log(title)
+        const questionList = mapQuestions(questions)
+        localStorage.setItem('questions', JSON.stringify(questionList));
         router.push("/game")
  }
 
