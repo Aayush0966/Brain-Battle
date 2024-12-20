@@ -129,8 +129,9 @@ const GamePage = () => {
     const progress = ((currentQuestion + 1) / totalQuestions) * 100;
 
     return (
-        <div className={`text-gray-100 overflow-auto h-full rounded-2xl p-4 sm:p-6 md:p-12 bg-gradient-to-b ${currentTheme.bgGradient}`}>
-            {isGameOver && <QuizResult score={score} />}
+        <>
+        {isGameOver && <QuizResult score={score} />}
+        {!isGameOver && <div className={`text-gray-100 overflow-auto h-full rounded-2xl p-4 sm:p-6 md:p-12 bg-gradient-to-b ${currentTheme.bgGradient}`}>
             {!isGameOver && <div className="max-w-4xl mx-auto">
                 <div className="flex justify-between items-center mb-4">
                     <div className="flex items-center gap-4">
@@ -237,7 +238,8 @@ const GamePage = () => {
                     </div>
                 )}
             </div>}
-        </div>
+        </div>}
+    </>
     );
 };
 

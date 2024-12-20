@@ -4,6 +4,7 @@ import {BackgroundBeamsWithCollision} from "@/components/ui/background-beams-wit
 import {Brain} from "lucide-react";
 import {motion} from "framer-motion";
 import {Toaster} from "react-hot-toast";
+import { Analytics } from "@vercel/analytics/react"
 
 
 export default function RootLayout({ children }) {
@@ -63,7 +64,9 @@ export default function RootLayout({ children }) {
                             Brain Battle
                         </span>
                   </motion.h1>
-                  {children}
+                 
+                  {children} 
+                  <Analytics />
               </motion.div>
           </motion.div>
       </BackgroundBeamsWithCollision>
