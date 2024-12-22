@@ -17,12 +17,12 @@ export default function RootLayout({ children }) {
           reverseOrder={true}
       />
       <BackgroundBeamsWithCollision className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-amber-50 to-purple-100 dark:from-black dark:to-slate-900 relative">
-          <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className="relative z-10 text-center px-8 py-12 rounded-3xl backdrop-blur-md bg-white/20 dark:bg-black/30 shadow-2xl border border-white/20 w-full max-w-4xl mx-auto flex flex-col items-center justify-center  h-full"
-          >
+        <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+           transition={{ duration: 0.8, ease: "easeOut" }}
+           className="relative z-10 text-center px-8 py-12 rounded-3xl backdrop-blur-md bg-white/20 dark:bg-black/30 shadow-2xl border border-white/20 w-full max-w-4xl mx-auto flex flex-col h-full overflow-scroll scrollbar-hide"
+        >
               <motion.div
                   className="w-full flex flex-col items-center"
                   initial={{ scale: 0 }}

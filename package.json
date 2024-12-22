@@ -36,6 +36,7 @@
     "react-dom": "19.0.0-rc-66855b96-20241106",
     "react-hot-toast": "^2.4.1",
     "tailwind-merge": "^2.5.5",
+    "tailwind-scrollbar-hide": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^11.0.3"
   },

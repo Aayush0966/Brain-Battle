@@ -24,25 +24,6 @@ const QuizFooter = ({
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 20 }}
                     >
-                        <Alert className={correct 
-                            ? 'bg-green-900/20 border-green-500/20' 
-                            : 'bg-red-900/20 border-red-500/20'
-                        }>
-                            {correct ? (
-                                <CheckCircle className="h-5 w-5 text-green-500"/>
-                            ) : (
-                                <XCircle className="h-5 w-5 text-red-500"/>
-                            )}
-                            <AlertDescription className={`ml-2 ${
-                                correct ? 'text-green-400' : 'text-red-400'
-                            }`}>
-                                {correct 
-                                    ? "Correct! Well done!" 
-                                    : `Incorrect. The correct answer was: ${correctAnswer}`
-                                }
-                            </AlertDescription>
-                        </Alert>
-
                         <Card className="bg-black/40 backdrop-blur-sm border border-gray-800 shadow-lg">
                             <CardContent className="p-6">
                                 <div className="flex gap-4 items-start">

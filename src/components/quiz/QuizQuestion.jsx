@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { CheckCircle, XCircle } from "lucide-react";
 
 const QuizQuestion = ({ 
     currentQuestion, 
@@ -11,7 +12,8 @@ const QuizQuestion = ({
     options, 
     selectedOption, 
     handleOptionSelect, 
-    showResult 
+    showResult,
+    correctAnswer
 }) => {
     return (
         <>
@@ -45,8 +47,14 @@ const QuizQuestion = ({
                                 <motion.button
                                     key={index}
                                     onClick={() => handleOptionSelect(option)}
-                                    className={`p-4 rounded-lg text-left transition-all duration-300 ${
-                                        selectedOption === option
+                                    className={`p-4 rounded-lg text-left transition-all duration-300 relative ${
+                                        showResult
+                                            ? option === correctAnswer
+                                                ? `bg-green-900/40 border-green-500/50`
+                                                : selectedOption === option
+                                                    ? `bg-red-900/40 border-red-500/50`
+                                                    : 'bg-gray-900/40 border-gray-700'
+                                            : selectedOption === option
                                             ? `bg-${currentTheme.accentColor}-900/40 border border-${currentTheme.accentColor}-500/50 shadow-lg`
                                             : 'bg-gray-900/40 hover:bg-gray-800/40 border border-gray-700'
                                     } ${showResult && 'cursor-not-allowed'}`}
@@ -54,12 +62,34 @@ const QuizQuestion = ({
                                     whileHover={!showResult && { scale: 1.02 }}
                                     whileTap={!showResult && { scale: 0.98 }}
                                 >
-                                    <span className={selectedOption === option 
-                                        ? `text-${currentTheme.accentColor}-300` 
-                                        : 'text-gray-200'
-                                    }>
-                                        {option}
-                                    </span>
+                                    <div className="flex justify-between items-center">
+                                        <span className={
+                                            showResult
+                                                ? option === correctAnswer
+                                                    ? 'text-green-300'
+                                                    : selectedOption === option
+                                                        ? 'text-red-300'
+                                                        : 'text-gray-200'
+                                                : selectedOption === option
+                                                    ? `text-${currentTheme.accentColor}-300`
+                                                    : 'text-gray-200'
+                                        }>
+                                            {option}
+                                        </span>
+                                        {showResult && (option === correctAnswer || selectedOption === option) && (
+                                            <motion.div
+                                                initial={{ scale: 0 }}
+                                                animate={{ scale: 1 }}
+                                                transition={{ duration: 0.2 }}
+                                            >
+                                                {option === correctAnswer ? (
+                                                    <CheckCircle className="h-5 w-5 text-green-500" />
+                                                ) : (
+                                                    <XCircle className="h-5 w-5 text-red-500" />
+                                                )}
+                                            </motion.div>
+                                        )}
+                                    </div>
                                 </motion.button>
                             ))}
                         </motion.div>
