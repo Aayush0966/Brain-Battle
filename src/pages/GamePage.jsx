@@ -147,6 +147,7 @@ const GamePage = () => {
                             selectedOption={selectedOption}
                             handleOptionSelect={handleOptionSelect}
                             showResult={showResult}
+                            correctAnswer={questionList[currentQuestion]?.correctAnswer}
                         />
 
                         <QuizFooter 

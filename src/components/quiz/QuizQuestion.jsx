@@ -15,6 +15,7 @@ const QuizQuestion = ({
     showResult,
     correctAnswer
 }) => {
+    console.log(correctAnswer)
     return (
         <>
             <motion.div layout transition={{ duration: 0.3, ease: "easeInOut" }}>
