@@ -21,7 +21,7 @@ export default function RootLayout({ children }) {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
            transition={{ duration: 0.8, ease: "easeOut" }}
-           className="relative z-10 text-center px-8 py-12 rounded-3xl backdrop-blur-md bg-white/20 dark:bg-black/30 shadow-2xl border border-white/20 w-full max-w-4xl mx-auto flex flex-col h-full overflow-scroll scrollbar-hide"
+           className="relative z-10 text-center px-8 py-12 rounded-3xl backdrop-blur-md bg-white/20 dark:bg-black/30 shadow-2xl border border-white/20 w-full max-w-4xl mx-auto flex flex-col h-full overflow-scroll scrollbar-none"
         >
               <motion.div
                   className="w-full flex flex-col items-center"
