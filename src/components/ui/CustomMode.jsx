@@ -1,122 +1,144 @@
 import React from 'react';
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Sparkles, Loader2 } from "lucide-react";
-import {getQuestionPack} from "@/app/actions";
-import axios from "axios";
-import toast from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
+import { Sparkles, Loader2, Brain, Wand2 } from "lucide-react";
+import { getQuestionPack } from "@/app/actions";
 import { processQuizData } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
 
 const CustomMode = () => {
     const [isHovered, setIsHovered] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const [inputValue, setInputValue] = React.useState('');
-    const router = useRouter()
+    const [charCount, setCharCount] = React.useState(0);
+    const router = useRouter();
+    const textareaRef = React.useRef(null);
 
-    const mapQuestions = (questions) => {
-        return questions.map((q) => {
-            const optionsString = JSON.stringify({
-                options: q.options
-            });
-
-            return {
-                questionText: q.question,
-                options: optionsString,
-                correctAnswer: q.answer,
-                explanation: q.explanation,
-            };
-        });
+    const handleInputChange = (e) => {
+        setInputValue(e.target.value);
+        setCharCount(e.target.value.length);
     };
 
- const handleFormSubmit = async (e) => {
+    const mapQuestions = (questions) => {
+        return questions.map((q) => ({
+            questionText: q.question,
+            options: JSON.stringify({ options: q.options }),
+            correctAnswer: q.answer,
+            explanation: q.explanation,
+        }));
+    };
+
+    const handleFormSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        const userPrefs = e.target[0].value;
-        const {userId, questionPack} = await getQuestionPack(userPrefs);
-        localStorage.setItem('user', JSON.stringify(userId) );
-        // const response = await axios.post('/api/quiz', {
-        //     userId, 
-        //     questionPack
-        // })
-        // setLoading(false)
-        // if (response.status !== 201) {
-        //     toast.error("Something went wrong")
-        // }
-        // toast.success(response.data.message)
-        // const questions = response?.data?.questionList;
-        const {title, questions} = processQuizData(questionPack)
-        console.log(title)
-        const questionList = mapQuestions(questions)
-        localStorage.setItem('questions', JSON.stringify(questionList));
-        router.push("/game")
- }
+        try {
+            const {userId, questionPack} = await getQuestionPack(inputValue);
+            localStorage.setItem('user', JSON.stringify(userId));
+            const {title, questions} = processQuizData(questionPack);
+            const questionList = mapQuestions(questions);
+            localStorage.setItem('questions', JSON.stringify(questionList));
+            router.push("/game");
+        } catch (error) {
+            console.error('Error generating quiz:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
-        <motion.form
-            onSubmit={handleFormSubmit}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="space-y-8 w-full max-w-2xl mx-auto"
-        >
+        <div className="flex flex-col items-center justify-center p-6">
             <motion.div
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.2 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="w-full max-w-2xl space-y-2"
             >
-                <Textarea
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    placeholder="Describe the type of quiz you want. For example: 'I want a quiz questions on advanced React topics.'"
-                    className="min-h-[150px] w-full p-6 dark:text-gray-200 bg-white/90 dark:bg-slate-800/90 rounded-xl shadow-lg border-2 border-transparent focus:border-purple-400 dark:focus:border-purple-500 focus:ring-0 resize-none text-lg transition-all duration-300"
-                />
-            </motion.div>
 
-            <motion.div
-                className="flex justify-center"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-            >
-                <Button
-                    disabled={loading || !inputValue.trim()}
-                    type="submit"
-                    onMouseEnter={() => setIsHovered(true)}
-                    onMouseLeave={() => setIsHovered(false)}
-                    className="group relative overflow-hidden px-8 py-6 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white rounded-xl shadow-lg text-lg font-medium transition-all duration-300"
+                <motion.form
+                    onSubmit={handleFormSubmit}
+                    className="space-y-6"
                 >
-                    <motion.span
-                        className="relative z-10 flex items-center gap-2"
-                        animate={{ x: isHovered ? [0, -4, 0] : 0 }}
-                        transition={{ duration: 0.3 }}
-                    >
-                        {loading ? (
-                            <>
-                                <Loader2 className="w-5 h-5 animate-spin" />
-                                Generating Quiz...
-                            </>
-                        ) : (
-                            <>
-                                Generate Quiz
-                                <Sparkles className="w-5 h-5" />
-                            </>
-                        )}
-                    </motion.span>
                     <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-purple-400 to-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                        animate={{
-                            scale: isHovered ? [1, 1.5] : 1,
-                            opacity: isHovered ? [0, 0.3, 0] : 0
-                        }}
-                        transition={{
-                            duration: 1,
-                            repeat: Infinity,
-                            repeatType: "reverse"
-                        }}
-                    />
-                </Button>
+                        className="relative"
+                        whileHover={{ scale: 1.01 }}
+                        transition={{ duration: 0.2 }}
+                    >
+                        <Textarea
+                            ref={textareaRef}
+                            value={inputValue}
+                            onChange={handleInputChange}
+                            placeholder="I want a quiz about..."
+                            className="min-h-[200px] w-full p-6 text-lg rounded-xl shadow-lg 
+                                     border-2 transition-all duration-300 
+                                     bg-white/90 dark:bg-slate-800/90
+                                     border-purple-200 dark:border-purple-900
+                                     focus:border-purple-500 dark:focus:border-purple-400
+                                     placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                        />
+                        <AnimatePresence>
+                            {inputValue && (
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.8 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.8 }}
+                                    className="absolute right-4 bottom-4 flex items-center gap-2 text-sm text-gray-500"
+                                >
+                                    <Wand2 className="w-4 h-4" />
+                                    {charCount} characters
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </motion.div>
+
+                    <motion.div
+                        className="flex justify-center"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                    >
+                        <Button
+                            disabled={loading || !inputValue.trim()}
+                            type="submit"
+                            className="relative group px-8 py-6 rounded-xl text-lg font-medium
+                                     bg-gradient-to-r from-purple-600 to-blue-600 
+                                     hover:from-purple-500 hover:to-blue-500 
+                                     text-white shadow-lg transition-all duration-300
+                                     disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            <motion.span
+                                className="relative z-10 flex items-center gap-2"
+                                animate={{ x: isHovered ? [0, -4, 0] : 0 }}
+                            >
+                                {loading ? (
+                                    <>
+                                        <Loader2 className="w-5 h-5 animate-spin" />
+                                        Crafting Your Quiz...
+                                    </>
+                                ) : (
+                                    <>
+                                        Generate Magic
+                                        <Sparkles className="w-5 h-5" />
+                                    </>
+                                )}
+                            </motion.span>
+                            <motion.div
+                                className="absolute inset-0 rounded-xl bg-gradient-to-r 
+                                         from-purple-400 to-blue-400 opacity-0 
+                                         group-hover:opacity-100 transition-opacity duration-300"
+                                animate={{
+                                    scale: isHovered ? [1, 1.5] : 1,
+                                    opacity: isHovered ? [0, 0.3, 0] : 0
+                                }}
+                                transition={{
+                                    duration: 1,
+                                    repeat: Infinity,
+                                    repeatType: "reverse"
+                                }}
+                            />
+                        </Button>
+                    </motion.div>
+                </motion.form>
             </motion.div>
-        </motion.form>
+        </div>
     );
 };
 
